@@ -9,12 +9,12 @@
           <h5 class="card-title">{{ sheet.properties.title }}</h5>
           <div class="d-flex justify-content-between">
             <div>
-              <p class="font-weight-light">Max. Level</p>
+              <p class="font-weight-light m-0">Max. Level</p>
               <h5 class="font-weight-bold pb-2 mb-1 border-bottom">{{ info[sheet.properties.title].max_level }}</h5>
               <p class="tx-12 text-muted">Height in ft</p>
             </div>
             <div>
-              <p class="font-weight-light">Full Capacity</p>
+              <p class="font-weight-light m-0">Full Capacity</p>
               <h5 class="font-weight-bold pb-2 mb-1 border-bottom">{{ info[sheet.properties.title].capacity }}</h5>
               <p class="tx-12 text-muted">Volume in TMC</p>
             </div>
@@ -46,8 +46,9 @@
             <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-4-tablet">
               <div class="mdc-card info-card info-card--success">
                 <div class="card-inner">
-                  <h5 class="card-title">Average Rainfall in catchment</h5>
-                  <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ averageRainfall }}</h5>
+                  <h5 class="card-title">Average Rainfall in Catchment</h5>
+                  <p class="font-weight-light">30 Days Average</p>
+                  <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ averageRainfall }}</h5>
                   <p class="tx-12 text-muted">Rainfall in mm</p>
                 </div>
               </div>
@@ -56,15 +57,16 @@
               <div class="mdc-card info-card" :class="cardClass('current')">
                 <div class="card-inner mr-0">
                   <h5 class="card-title">Current Status</h5>
+                  <p class="font-weight-light">Water Supply Risk: {{ row[25] }}</p>
                   <div class="d-flex justify-content-between">
                     <div>
-                      <p class="font-weight-light">Water level</p>
-                      <h5 class="font-weight-bold pb-2 mb-1 border-bottom">{{ row[3] }}</h5>
+                      <p class="font-weight-light m-0">Water Level</p>
+                      <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[3] }}</h5>
                       <p class="tx-12 text-muted">Height in ft</p>
                     </div>
                     <div>
-                      <p class="font-weight-light">Volume</p>
-                      <h5 class="font-weight-bold pb-2 mb-1 border-bottom">{{ row[3] }}</h5>
+                      <p class="font-weight-light m-0">Volume</p>
+                      <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[3] }}</h5>
                       <p class="tx-12 text-muted">Volume in TMC</p>
                     </div>
                   </div>
@@ -75,7 +77,8 @@
               <div class="mdc-card info-card info-card--primary" :class="cardClass('15_days')">
                 <div class="card-inner">
                   <h5 class="card-title">15 Days Prediction</h5>
-                  <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ row[23] }}</h5>
+                  <p class="font-weight-light">Water Supply Risk: {{ row[26] }}</p>
+                  <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[23] }}</h5>
                   <p class="tx-12 text-muted">Height in ft</p>
                 </div>
               </div>
@@ -84,7 +87,8 @@
               <div class="mdc-card info-card info-card--info" :class="cardClass('30_days')">
                 <div class="card-inner">
                   <h5 class="card-title">30 Days Prediction</h5>
-                  <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ row[24] }}</h5>
+                  <p class="font-weight-light">Water Supply Risk: {{ row[27] }}</p>
+                  <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[24] }}</h5>
                   <p class="tx-12 text-muted" v-if="row[24] && row[24] !== 'N/A'">Height in ft</p>
                 </div>
               </div>
@@ -178,7 +182,7 @@ export default {
       return this.date == '' ? [] : _.find(this.items, { 2: this.date })
     },
     averageRainfall() {
-      return _.sumBy(this.range, item => Number(item[7]))
+      return Math.ceil(_.sumBy(this.range, item => Number(item[7])))
     },
     datePickerTo() {
       if (this.items.length) {
@@ -435,5 +439,9 @@ aside .mdc-card.active {
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+
+.fs-large {
+  font-size: 2rem;
 }
 </style>
