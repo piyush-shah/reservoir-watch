@@ -60,13 +60,13 @@
                   <p class="font-weight-light">Water Supply Risk: {{ row[25] }}</p>
                   <div class="d-flex justify-content-between">
                     <div>
-                      <p class="font-weight-light m-0">Water Level</p>
+                      <p class="m-0">Water Level</p>
                       <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[3] }}</h5>
                       <p class="tx-12 text-muted">Height in ft</p>
                     </div>
                     <div>
-                      <p class="font-weight-light m-0">Volume</p>
-                      <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[3] }}</h5>
+                      <p class="m-0">Volume</p>
+                      <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[4] }}</h5>
                       <p class="tx-12 text-muted">Volume in TMC</p>
                     </div>
                   </div>
@@ -78,6 +78,7 @@
                 <div class="card-inner">
                   <h5 class="card-title">15 Days Prediction</h5>
                   <p class="font-weight-light">Water Supply Risk: {{ row[26] }}</p>
+                  <p class="m-0">Water Level</p>
                   <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[23] }}</h5>
                   <p class="tx-12 text-muted">Height in ft</p>
                 </div>
@@ -88,6 +89,7 @@
                 <div class="card-inner">
                   <h5 class="card-title">30 Days Prediction</h5>
                   <p class="font-weight-light">Water Supply Risk: {{ row[27] }}</p>
+                  <p class="m-0">Water Level</p>
                   <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[24] }}</h5>
                   <p class="tx-12 text-muted" v-if="row[24] && row[24] !== 'N/A'">Height in ft</p>
                 </div>
@@ -151,7 +153,7 @@ export default {
           lon: 76.4827,
           zoom: 11,
           max_level: 124.8,
-          capacity: 19.52,
+          capacity: 49.45,
         },
         Hemavathi: {
           lat: 12.8312,
@@ -182,7 +184,8 @@ export default {
       return this.date == '' ? [] : _.find(this.items, { 2: this.date })
     },
     averageRainfall() {
-      return Math.ceil(_.sumBy(this.range, item => Number(item[7])))
+      let rainfall = _.sumBy(this.range, item => Number(item[7])) / 30
+      return rainfall.toFixed(2)
     },
     datePickerTo() {
       if (this.items.length) {
@@ -245,12 +248,12 @@ export default {
       axios.get('https://sheets.googleapis.com/v4/spreadsheets/1x8WkZ5NJk9BgOsQIz1R4jShRC7hd3KcwE-NK9C45RdM?alt=json&key=AIzaSyDRMLsE7nXHAPfpL8WavbwqdtA70geEt0o').then(res => {
         this.sheets = res.data.sheets
         localStorage.setItem('sheets', JSON.stringify(res.data.sheets))
+        this.current = this.sheets[0].properties.title
       })
     } else {
       this.sheets = JSON.parse(sheets)
+      this.current = this.sheets[0].properties.title
     }
-
-    this.current = this.sheets[0].properties.title
   },
   methods: {
     setCurrentSheet(val) {
@@ -303,7 +306,6 @@ export default {
               pointBorderWidth: 4,
               pointRadius: 1,
               fill: 'origin',
-              label: 'Historic Data',
             },
             {
               data: prediction,
@@ -314,7 +316,6 @@ export default {
               pointBorderWidth: 4,
               pointRadius: 1,
               fill: 'origin',
-              label: 'Predicted Data',
             },
           ],
         },
@@ -372,11 +373,11 @@ export default {
             var text = []
             text.push('<div>')
             text.push('<div class="d-flex align-items-center">')
-            text.push('<span class="bullet-rounded" style="border-color: ' + chart.data.datasets[1].borderColor[0] + ' "></span>')
+            text.push('<span class="bullet-rounded" style="background-color: ' + chart.data.datasets[0].borderColor[0] + '; border-color: ' + chart.data.datasets[0].borderColor[0] + ' "></span>')
             text.push('<p class="tx-12 text-muted mb-0 ml-2">Historic Data</p>')
             text.push('</div>')
             text.push('<div class="d-flex align-items-center">')
-            text.push('<span class="bullet-rounded" style="border-color: ' + chart.data.datasets[0].borderColor[0] + ' "></span>')
+            text.push('<span class="bullet-rounded" style="background-color: ' + chart.data.datasets[1].borderColor[0] + ';border-color: ' + chart.data.datasets[1].borderColor[0] + ' "></span>')
             text.push('<p class="tx-12 text-muted mb-0 ml-2">Predicted Data</p>')
             text.push('</div>')
             text.push('</div>')
