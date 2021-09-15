@@ -1,7 +1,7 @@
 <template>
   <aside class="mdc-drawer mdc-drawer--dismissible mdc-drawer--open">
     <div class="mdc-drawer__header">
-      <h4 class="brand-logo text-white">Reservoir Watch</h4>
+      <h4 class="brand-logo text-white text-center">Reservoir Watch</h4>
     </div>
     <div class="mdc-drawer__content pt-4">
       <div class="mdc-card mx-3 p-3 mb-4" :class="{ active: current == sheet.properties.title }" v-for="sheet in sheets" :key="sheet.properties.title" @click="setCurrentSheet(sheet.properties.title)">
