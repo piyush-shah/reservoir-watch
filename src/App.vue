@@ -66,7 +66,7 @@
                     </div>
                     <div>
                       <p class="m-0">Volume</p>
-                      <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[4] }}</h5>
+                      <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ parseFloat(row[6]).toFixed(2) }}</h5>
                       <p class="tx-12 text-muted">Volume in TMC</p>
                     </div>
                   </div>
