@@ -104,9 +104,7 @@
               </div>
             </div>
             <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4 mdc-layout-grid__cell--span-8-tablet">
-              <div class="mdc-card p-0">
-                <iframe :src="`${publicPath}map/index.html#6/12.555/76.992`" id="map" scrolling="no" frameBorder="0"></iframe>
-              </div>
+              <div class="mdc-card p-0" id="map"></div>
             </div>
           </div>
         </div>
@@ -132,6 +130,7 @@ import Datepicker from 'vue3-datepicker'
 
 let $ = window.jQuery
 let Chart = window.Chart
+let rChart
 
 export default {
   components: { Datepicker },
@@ -228,7 +227,8 @@ export default {
         this.updateChart()
       }
 
-      $('#map').attr('src', `${this.publicPath}map/index.html#${this.info[val].zoom}/${this.info[val].lat}/${this.info[val].lon}`)
+      $('#map').empty()
+      $('<iframe/>', { name: 'map', id: 'reservoir-map', width: '100%', frameBorder: '0', height: '100%', src: `${this.publicPath}map/index.html#${this.info[val].zoom}/${this.info[val].lat}/${this.info[val].lon}` }).appendTo('#map')
     },
     date() {
       this.updateChart()
@@ -267,6 +267,10 @@ export default {
     },
 
     updateChart() {
+      if (rChart) {
+        rChart.destroy()
+      }
+
       let labels = _.map(this.range, 2)
       let history = _.map(this.range, 3)
       let prediction = _.map(this.range, 23)
@@ -281,7 +285,7 @@ export default {
       gradient2.addColorStop(0, '#1bbd88')
       gradient2.addColorStop(1, 'rgba(255, 255, 255, 0)')
 
-      let levelChart = new Chart(chartCanvas, {
+      rChart = new Chart(chartCanvas, {
         type: 'line',
         data: {
           labels: labels,
@@ -376,7 +380,8 @@ export default {
           },
         },
       })
-      document.getElementById('level-legend').innerHTML = levelChart.generateLegend()
+
+      document.getElementById('level-legend').innerHTML = rChart.generateLegend()
     },
   },
 }
