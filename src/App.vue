@@ -47,7 +47,7 @@
               <div class="mdc-card info-card info-card--success">
                 <div class="card-inner">
                   <h5 class="card-title">Average Rainfall in catchment</h5>
-                  <h5 class="font-weight-light pb-2 mb-1 border-bottom">$62,0076.00</h5>
+                  <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ averageRainfall }}</h5>
                   <p class="tx-12 text-muted">Rainfall in mm</p>
                 </div>
               </div>
@@ -143,26 +143,30 @@ export default {
       sheets: [],
       info: {
         KRS: {
-          lat: 23.23,
-          lon: 42.274,
+          lat: 12.4728,
+          lon: 76.4827,
+          zoom: 11,
           max_level: 124.8,
           capacity: 19.52,
         },
         Hemavathi: {
-          lat: 13.23,
-          lon: 72.274,
+          lat: 12.8312,
+          lon: 76.0007,
+          zoom: 11,
           max_level: 2922,
           capacity: 37.1,
         },
         Harangi: {
-          lat: 73.23,
-          lon: 32.274,
+          lat: 12.4969,
+          lon: 75.8795,
+          zoom: 12,
           max_level: 2959,
           capacity: 8.5,
         },
         Kabini: {
-          lat: 53.23,
-          lon: 22.274,
+          lat: 11.956,
+          lon: 76.2753,
+          zoom: 11,
           max_level: 2284,
           capacity: 19.52,
         },
@@ -174,8 +178,7 @@ export default {
       return this.date == '' ? [] : _.find(this.items, { 2: this.date })
     },
     averageRainfall() {
-      let index = _.findIndex(this.items, { 2: this.date })
-      return 0
+      return _.sumBy(this.range, item => Number(item[7]))
     },
     datePickerTo() {
       if (this.items.length) {
@@ -201,7 +204,6 @@ export default {
     },
     range() {
       let index = _.findIndex(this.items, { 2: this.date })
-      console.log(index)
       let _items = JSON.parse(JSON.stringify(this.items))
       return _items.splice(index - 30, 30)
     },
@@ -225,7 +227,7 @@ export default {
         this.updateChart()
       }
 
-      $('#map').attr('src', '/map/index.html#10/' + this.info[val].lat + '/' + this.info[val].lon)
+      $('#map').attr('src', `/map/index.html#${this.info[val].zoom}/${this.info[val].lat}/${this.info[val].lon}`)
     },
     date() {
       this.updateChart()
