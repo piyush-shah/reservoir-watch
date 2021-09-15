@@ -104,8 +104,8 @@
               </div>
             </div>
             <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4 mdc-layout-grid__cell--span-8-tablet">
-              <div class="mdc-card bg-secondary p-0">
-                <iframe src="/map/index.html#6/12.555/76.992" id="map" scrolling="no" frameBorder="0"></iframe>
+              <div class="mdc-card p-0">
+                <iframe :src="`${publicPath}map/index.html#6/12.555/76.992`" id="map" scrolling="no" frameBorder="0"></iframe>
               </div>
             </div>
           </div>
@@ -137,6 +137,7 @@ export default {
   components: { Datepicker },
   data() {
     return {
+      publicPath: process.env.BASE_URL,
       current: '',
       items: [],
       date: '',
@@ -227,7 +228,7 @@ export default {
         this.updateChart()
       }
 
-      $('#map').attr('src', `/map/index.html#${this.info[val].zoom}/${this.info[val].lat}/${this.info[val].lon}`)
+      $('#map').attr('src', `${this.publicPath}map/index.html#${this.info[val].zoom}/${this.info[val].lat}/${this.info[val].lon}`)
     },
     date() {
       this.updateChart()
