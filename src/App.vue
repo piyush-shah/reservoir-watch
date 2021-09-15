@@ -237,7 +237,11 @@ export default {
       $('#map').empty()
       $('<iframe/>', { name: 'map', id: 'reservoir-map', width: '100%', frameBorder: '0', height: '100%', src: `${this.publicPath}map/index.html#${this.info[val].zoom}/${this.info[val].lat}/${this.info[val].lon}` }).appendTo('#map')
     },
-    date() {
+    date(val, oldval) {
+      if (_.findIndex(this.items, { 2: val }) == -1) {
+        this.date = oldval
+      }
+
       this.updateChart()
     },
   },
