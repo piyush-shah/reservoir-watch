@@ -19212,9 +19212,9 @@ a {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url(../../vendors/material-design-icons/iconfont/MaterialIcons-Regular.eot);
+  src: url(../vendors/material-design-icons/iconfont/MaterialIcons-Regular.eot);
   /* For IE6-8 */
-  src: local("Material Icons"), local("MaterialIcons-Regular"), url(../../vendors/material-design-icons/iconfont/MaterialIcons-Regular.woff2) format("woff2"), url(../../vendors/material-design-icons/iconfont/MaterialIcons-Regular.woff) format("woff"), url(../../vendors/material-design-icons/iconfont/MaterialIcons-Regular.ttf) format("truetype");
+  src: local("Material Icons"), local("MaterialIcons-Regular"), url(../vendors/material-design-icons/iconfont/MaterialIcons-Regular.woff2) format("woff2"), url(../vendors/material-design-icons/iconfont/MaterialIcons-Regular.woff) format("woff"), url(../vendors/material-design-icons/iconfont/MaterialIcons-Regular.ttf) format("truetype");
 }
 
 .material-icons {
@@ -22881,7 +22881,7 @@ address p {
 /* Sidebar */
 .mdc-drawer {
   background: linear-gradient(#2a1c5a, #4b3a6e);
-  background: url(../../images/sidebar/sidebar-bg.jpg);
+  background: url(../images/sidebar/sidebar-bg.jpg);
   position: fixed;
 }
 
