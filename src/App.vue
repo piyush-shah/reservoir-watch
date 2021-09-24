@@ -330,7 +330,7 @@ export default {
 
       let labels = _.map(this.range, 2)
       let history = _.map(this.range, 3)
-      let prediction = _.map(this.range, 29)
+      let prediction = _.map(this.range, 28)
       let chartCanvas = $('#level-chart')
         .get(0)
         .getContext('2d')
