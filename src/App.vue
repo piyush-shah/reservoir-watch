@@ -330,7 +330,7 @@ export default {
 
       let labels = _.map(this.range, 2)
       let history = _.map(this.range, 3)
-      let prediction = _.map(this.range, 23)
+      let prediction = _.map(this.range, 29)
       let chartCanvas = $('#level-chart')
         .get(0)
         .getContext('2d')
@@ -370,6 +370,13 @@ export default {
           ],
         },
         options: {
+          tooltips: {
+            callbacks: {
+              label: (item, data) => {
+                return item.yLabel + ' ft'
+              },
+            },
+          },
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
@@ -401,8 +408,6 @@ export default {
                   labelString: 'Reservoir Level (ft)',
                   display: true,
                 },
-                display: true,
-                fontColor: '#ff0000',
                 ticks: {
                   fontColor: '#bababa',
                   stepSize: 1,
@@ -417,9 +422,6 @@ export default {
           },
           legend: {
             display: false,
-          },
-          tooltips: {
-            enabled: true,
           },
           elements: {
             line: {
