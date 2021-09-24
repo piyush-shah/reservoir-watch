@@ -11,12 +11,12 @@
             <div>
               <p class="font-weight-light m-0">Max. Level</p>
               <h5 class="font-weight-bold pb-2 mb-1 border-bottom">{{ info[sheet.properties.title].max_level }}</h5>
-              <p class="tx-12 text-muted">Height in ft</p>
+              <p class="tx-11 text-muted">Height in ft</p>
             </div>
             <div>
               <p class="font-weight-light m-0">Full Capacity</p>
               <h5 class="font-weight-bold pb-2 mb-1 border-bottom">{{ info[sheet.properties.title].capacity }}</h5>
-              <p class="tx-12 text-muted">Volume in TMC</p>
+              <p class="tx-11 text-muted">Volume in TMC</p>
             </div>
           </div>
         </div>
@@ -32,8 +32,9 @@
           <span class="mdc-top-app-bar__title">{{ row[1] }}</span>
         </div>
         <div class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end mdc-top-app-bar__section-right">
-          <div class="menu-button-container d-none d-md-block">
-            <datepicker v-model="selectedDate" input-format="dd-MM-yyyy" :lower-limit="datePickerFrom" :upper-limit="datePickerTo" />
+          <div class="menu-button-container d-none d-md-flex">
+            <span class="tx-13 mt-1">Select Date:&nbsp;</span>
+            <datepicker v-model="selectedDate" :disabled-dates="{ dates: disabledDates }" input-format="dd-MM-yyyy" :lower-limit="datePickerFrom" :upper-limit="datePickerTo" />
           </div>
         </div>
       </div>
@@ -45,29 +46,29 @@
           <div class="mdc-layout-grid__inner">
             <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-4-tablet">
               <div class="mdc-card info-card info-card--success">
-                <div class="card-inner">
-                  <h5 class="card-title">Average Rainfall in Catchment</h5>
-                  <p class="font-weight-light">30 Days Average</p>
-                  <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ averageRainfall }}</h5>
-                  <p class="tx-12 text-muted">Rainfall in mm</p>
+                <div class="card-inner mr-0">
+                  <h5 class="card-title">Cumulative Annual Rainfall in Catchment</h5>
+                  <p class="font-weight-light">&nbsp;</p>
+                  <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ parseFloat(row[10]).toFixed(2) }} mm</h5>
+                  <p class="tx-12 text-muted">Average Annual Rainfall: {{ row[1] ? info[row[1]].rainfall : '' }} mm</p>
                 </div>
               </div>
             </div>
             <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-4-tablet">
               <div class="mdc-card info-card" :class="cardClass('current')">
                 <div class="card-inner mr-0">
-                  <h5 class="card-title">Current Status</h5>
+                  <h5 class="card-title">Current Reservoir Status</h5>
                   <p class="font-weight-light">Water Supply Risk: {{ row[25] }}</p>
                   <div class="d-flex justify-content-between">
                     <div>
                       <p class="m-0">Water Level</p>
                       <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[3] }}</h5>
-                      <p class="tx-12 text-muted">Height in ft</p>
+                      <p class="tx-11 text-muted">Height in ft</p>
                     </div>
                     <div>
                       <p class="m-0">Volume</p>
                       <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ parseFloat(row[6]).toFixed(2) }}</h5>
-                      <p class="tx-12 text-muted">Volume in TMC</p>
+                      <p class="tx-11 text-muted">Volume in TMC</p>
                     </div>
                   </div>
                 </div>
@@ -75,23 +76,41 @@
             </div>
             <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-4-tablet">
               <div class="mdc-card info-card info-card--primary" :class="cardClass('15_days')">
-                <div class="card-inner">
+                <div class="card-inner mr-0">
                   <h5 class="card-title">15 Days Prediction</h5>
                   <p class="font-weight-light">Water Supply Risk: {{ row[26] }}</p>
-                  <p class="m-0">Water Level</p>
-                  <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[23] }}</h5>
-                  <p class="tx-12 text-muted">Height in ft</p>
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <p class="m-0">Water Level</p>
+                      <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[23] }}</h5>
+                      <p class="tx-11 text-muted">Height in ft</p>
+                    </div>
+                    <div>
+                      <p class="m-0">Accuracy</p>
+                      <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ isNaN(row[29]) ? row[29] : parseFloat(row[29]).toFixed(2) }}</h5>
+                      <p class="tx-11 text-muted">Value in %</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-4-tablet">
               <div class="mdc-card info-card info-card--info" :class="cardClass('30_days')">
-                <div class="card-inner">
+                <div class="card-inner mr-0">
                   <h5 class="card-title">30 Days Prediction</h5>
                   <p class="font-weight-light">Water Supply Risk: {{ row[27] }}</p>
-                  <p class="m-0">Water Level</p>
-                  <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[24] }}</h5>
-                  <p class="tx-12 text-muted" v-if="row[24] && row[24] !== 'N/A'">Height in ft</p>
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <p class="m-0">Water Level</p>
+                      <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ row[24] }}</h5>
+                      <p class="tx-11 text-muted" v-if="row[24] && row[24] !== 'N/A'">Height in ft</p>
+                    </div>
+                    <div>
+                      <p class="m-0">Accuracy</p>
+                      <h5 class="font-weight-bold pb-2 mb-1 border-bottom fs-large">{{ isNaN(row[30]) ? row[30] : parseFloat(row[30]).toFixed(2) }}</h5>
+                      <p class="tx-11 text-muted">Value in %</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -99,8 +118,7 @@
               <div class="mdc-card">
                 <div class="d-flex justify-content-between align-items-center">
                   <div>
-                    <h4 class="card-title">Reservoir Level (ft)</h4>
-                    <h6 class="card-sub-title">Historic data vs Predictive Model Result</h6>
+                    <h4 class="card-title">Actual data vs Predictive Model Result</h4>
                   </div>
                   <div id="level-legend" class="d-flex flex-wrap"></div>
                 </div>
@@ -119,7 +137,7 @@
         <div class="mdc-layout-grid">
           <div class="mdc-layout-grid__inner">
             <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-6-desktop">
-              <span class="text-center text-sm-left d-block d-sm-inline-block tx-14">SpatialXYZ 2021</span>
+              <span class="text-center text-sm-left d-block d-sm-inline-block tx-14">SpatialXYZ &copy; 2021 | <a href="https://drive.google.com/file/d/115ywrEGOnZlgGDf1AGe3vjdEez8rP9Dw/view" target="_blank">About</a></span>
             </div>
           </div>
         </div>
@@ -131,7 +149,7 @@
 <script>
 import axios from 'axios'
 import _ from 'lodash'
-import { format, parse } from 'date-fns'
+import { eachDayOfInterval, format, parse } from 'date-fns'
 import Datepicker from 'vue3-datepicker'
 
 let $ = window.jQuery
@@ -148,33 +166,37 @@ export default {
       date: '',
       sheets: [],
       info: {
-        KRS: {
+        'Krishna Raja Sagara Dam': {
           lat: 12.4728,
           lon: 76.4827,
           zoom: 11,
           max_level: 124.8,
           capacity: 49.45,
+          rainfall: 750,
         },
-        Hemavathi: {
+        'Hemavathi Dam': {
           lat: 12.8312,
           lon: 76.0007,
           zoom: 11,
           max_level: 2922,
           capacity: 37.1,
+          rainfall: 900,
         },
-        Harangi: {
+        'Harangi Dam': {
           lat: 12.4969,
           lon: 75.8795,
           zoom: 12,
           max_level: 2959,
           capacity: 8.5,
+          rainfall: 1240,
         },
-        Kabini: {
+        'Kabini Dam': {
           lat: 11.956,
           lon: 76.2753,
           zoom: 11,
           max_level: 2284,
           capacity: 19.52,
+          rainfall: 1300,
         },
       },
     }
@@ -183,13 +205,37 @@ export default {
     row() {
       return this.date == '' ? [] : _.find(this.items, { 2: this.date })
     },
-    averageRainfall() {
-      let rainfall = _.sumBy(this.range, item => Number(item[7])) / 30
-      return rainfall.toFixed(2)
+    disabledDates() {
+      let disabledDates = []
+
+      if (this.items.length) {
+        let dates = eachDayOfInterval({
+          start: parse(this.items[1][2], 'dd-MM-yyyy', new Date()),
+          end: parse(this.items[this.items.length - 1][2], 'dd-MM-yyyy', new Date()),
+        })
+
+        dates = _.map(dates, date => format(date, 'dd-MM-yyyy'))
+
+        let item_dates = _.map(this.items, 2)
+        item_dates.shift()
+
+        disabledDates = _.reduce(
+          dates,
+          (result, value, key) => {
+            if (!_.includes(item_dates, value)) {
+              result.push(parse(value, 'dd-MM-yyyy', new Date()))
+            }
+            return result
+          },
+          []
+        )
+      }
+
+      return disabledDates
     },
     datePickerTo() {
       if (this.items.length) {
-        return parse(this.items[this.items.length - 1][2], 'dd-MM-yyyy', new Date())
+        return parse(this.items[this.items.length - 30][2], 'dd-MM-yyyy', new Date())
       }
 
       return new Date()
@@ -212,7 +258,7 @@ export default {
     range() {
       let index = _.findIndex(this.items, { 2: this.date })
       let _items = JSON.parse(JSON.stringify(this.items))
-      return _items.splice(index - 30, 30)
+      return _items.splice(index, 30)
     },
   },
   watch: {
@@ -223,13 +269,13 @@ export default {
         axios.get(`https://sheets.googleapis.com/v4/spreadsheets/1x8WkZ5NJk9BgOsQIz1R4jShRC7hd3KcwE-NK9C45RdM/values/${val}?alt=json&key=AIzaSyDRMLsE7nXHAPfpL8WavbwqdtA70geEt0o`).then(res => {
           this.items = res.data.values
           localStorage.setItem(val, JSON.stringify(res.data.values))
-          let row = this.items[this.items.length - 1]
+          let row = this.items[this.items.length - 30]
           this.date = row[2]
           this.updateChart()
         })
       } else {
         this.items = JSON.parse(items)
-        let row = this.items[this.items.length - 1]
+        let row = this.items[this.items.length - 30]
         this.date = row[2]
         this.updateChart()
       }
@@ -341,6 +387,7 @@ export default {
               {
                 ticks: {
                   fontColor: '#bababa',
+                  fontSize: 11,
                 },
                 gridLines: {
                   display: false,
@@ -350,6 +397,12 @@ export default {
             ],
             yAxes: [
               {
+                scaleLabel: {
+                  labelString: 'Reservoir Level (ft)',
+                  display: true,
+                },
+                display: true,
+                fontColor: '#ff0000',
                 ticks: {
                   fontColor: '#bababa',
                   stepSize: 1,
@@ -378,11 +431,11 @@ export default {
             text.push('<div>')
             text.push('<div class="d-flex align-items-center">')
             text.push('<span class="bullet-rounded" style="background-color: ' + chart.data.datasets[0].borderColor[0] + '; border-color: ' + chart.data.datasets[0].borderColor[0] + ' "></span>')
-            text.push('<p class="tx-12 text-muted mb-0 ml-2">Historic Data</p>')
+            text.push('<p class="tx-11 text-muted mb-0 ml-2">Actual Data</p>')
             text.push('</div>')
             text.push('<div class="d-flex align-items-center">')
             text.push('<span class="bullet-rounded" style="background-color: ' + chart.data.datasets[1].borderColor[0] + ';border-color: ' + chart.data.datasets[1].borderColor[0] + ' "></span>')
-            text.push('<p class="tx-12 text-muted mb-0 ml-2">Predicted Data</p>')
+            text.push('<p class="tx-11 text-muted mb-0 ml-2">Predicted Data</p>')
             text.push('</div>')
             text.push('</div>')
             return text.join('')
